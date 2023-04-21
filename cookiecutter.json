@@ -1,6 +1,10 @@
 {
     "project_name": "New QuickStart ML Project",
-    "experiment_name": "{{ cookiecutter.project_name.strip().replace(' ', '_').lower() }}",
+    "subscription_id": "<SUBSCRIPTION_ID>",
+    "mlflow_experiment_name": "{{ cookiecutter.project_name.strip().replace(' ', '_').lower() }}",
     "repo_name": "{{ cookiecutter.project_name.strip().replace(' ', '-').replace('_', '-').lower() }}",
-    "python_package": "{{ cookiecutter.project_name.strip().replace(' ', '_').replace('-', '_').lower() }}"
+    "python_package": "{{ cookiecutter.project_name.strip().replace(' ', '_').replace('-', '_').lower() }}",
+    "azure_prefix": "{{ cookiecutter.project_name.strip().replace(' ', '-').replace('_', '-').lower() }}",
+    "azure_prefix_alphanum": "{{ cookiecutter.azure_prefix.replace('-', '') }}",
+    "azure_location": "westeurope"
 }

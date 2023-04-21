@@ -1,28 +1,25 @@
-ARG BASE_IMAGE=nvidia/cuda:11.3.0-runtime-ubuntu20.04
+FROM ubuntu:22.04
 
-FROM $BASE_IMAGE
-# Change the above line for the one below to enable emulated ARM64 (Apple M1/M2) support
-# FROM --platform=linux/amd64 $BASE_IMAGE
+RUN apt update && apt upgrade -y
 
-RUN apt-get update && apt-get upgrade -y
-
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive TZ=Europe/Warsaw apt-get install -y git make build-essential libssl-dev zlib1g-dev \
-        libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
-        libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+# install java, curl, git, tools to compile python
+RUN apt update &&  \
+    apt install -y sudo && \
+    sudo apt install default-jdk curl git \
+    build-essential libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev libsqlite3-dev libbz2-dev wget zlib1g-dev -y && \
+    rm -rf /var/lib/apt/lists/*
 
 # add kedro user
 ARG KEDRO_UID=1000
 ARG KEDRO_GID=1000
-RUN groupadd -f -g ${KEDRO_GID} kedro_group && \
-    useradd -d /home/kedro -s /bin/bash -g ${KEDRO_GID} -u ${KEDRO_UID} kedro
+ARG USER_NAME=kedro
+RUN groupadd --gid ${KEDRO_GID} $USER_NAME && \
+    useradd --uid ${KEDRO_UID} --gid ${KEDRO_GID} -m $USER_NAME
 
-# copy the whole project except what is in .dockerignore
-ENV HOME /home/kedro
+# switch to user / user directory
+ENV HOME /home/${USER_NAME}
+USER $USER_NAME
 WORKDIR ${HOME}
-RUN chown -R kedro:${KEDRO_GID} ${HOME}
-USER kedro
-RUN chmod -R a+w ${HOME}
 
 # pyenv
 RUN git clone --depth=1 https://github.com/pyenv/pyenv.git ~/.pyenv
@@ -30,22 +27,18 @@ ENV PYENV_ROOT="${HOME}/.pyenv"
 ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${PATH}"
 
 # python
-ENV PYTHON_VERSION=3.8.16
+ENV PYTHON_VERSION=3.10.8
 RUN pyenv install ${PYTHON_VERSION}
 RUN pyenv global ${PYTHON_VERSION}
 
 # poetry
-ENV POETRY_VERSION=1.3.2
+ENV POETRY_VERSION=1.4.2
 RUN curl -sSL https://install.python-poetry.org | python3 -
 ENV PATH="$PATH:${HOME}/.local/bin"
 
 # requirements
 RUN poetry config virtualenvs.create false
-COPY pyproject.toml poetry.lock ./
+COPY --chown=${USER_NAME}:1000 pyproject.toml poetry.lock ./
 RUN poetry run pip install --upgrade pip
-RUN poetry install && rm -rf ${HOME}/.cache/pypoetry
+RUN poetry install && rm -rf .cache/pypoetry && rm pyproject.toml poetry.lock
 RUN pyenv rehash
-
-COPY . .
-
-CMD ["kedro", "run"]

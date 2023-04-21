@@ -2,6 +2,29 @@
 #
 # Documentation for this file format can be found in "The Data Catalog"
 # Link: https://kedro.readthedocs.io/en/stable/data/data_catalog.html
-#
-# We support interacting with a variety of data stores including local file systems, cloud, network and HDFS
-#
+
+source_data:
+  type: pandas.CSVDataSet
+  filepath: https://gist.githubusercontent.com/curran/a08a1080b88344b0c8a7/raw/0e7a9b0a5d22642a06d3d5b9bcbad9890c8ee534/iris.csv
+
+raw_labels:
+  type: pandas.ParquetDataSet
+  filepath: ${storage_prefix}data/01_raw/labels.pq
+  credentials: abs_creds
+
+raw_features:
+  type: pandas.ParquetDataSet
+  filepath: ${storage_prefix}data/01_raw/features.pq
+  credentials: abs_creds
+
+trained_model:
+  type: pickle.PickleDataSet
+  filepath: data/06_models/trained_model.pkl # artifacts should be local for kedro-mlflow
+
+accuracy:
+  type: kedro_mlflow.io.metrics.MlflowMetricDataSet
+
+predictions:
+  type: pandas.ParquetDataSet
+  filepath: ${storage_prefix}data/08_reporting/predictions.pq
+  credentials: abs_creds

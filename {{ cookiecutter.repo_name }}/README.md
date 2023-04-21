@@ -1,6 +1,6 @@
 # {{ cookiecutter.project_name }}
 
-This is your new Kedro project configured according to QuickStart ML principles. Modify this README as you develop your project, for now you will find here some basic info that you need to get started. For more detailed assistance please refer to the [Kedro documenation](https://kedro.readthedocs.io/en/stable/index.html) and [QuickStart ML Blueprints](https://github.com/getindata/quickstart-ml-blueprints).
+This is your new Kedro project configured according to QuickStart ML principles. Modify this README as you develop your project, for now you will find here some basic info that you need to get started. For more detailed assistance please refer to the [Kedro documentation](https://kedro.readthedocs.io/en/stable/index.html) and [QuickStart ML Blueprints](https://github.com/getindata/quickstart-ml-blueprints).
 
 Additionally to a blank Kedro template it features technological stack used in QuickStart ML approach, such as:
   - [Poetry](https://python-poetry.org/)
@@ -8,9 +8,6 @@ Additionally to a blank Kedro template it features technological stack used in Q
   - [Dockerfile](https://docs.docker.com/engine/reference/builder/) setup
   - [VSCode Dev Containers](https://code.visualstudio.com/docs/devcontainers/containers) for ease of development
   - [MLFlow integration](https://kedro-mlflow.readthedocs.io/en/stable/)
-  - [GCP VertexAI Kedro integration](https://github.com/getindata/kedro-vertexai) with integration to other platforms to be added
-
- Apart from that, there are no pre-implemented nodes or pipelines here. For blueprints showing different machine learning use cases, please go to the main [QuickStart ML Blueprints](https://github.com/getindata/quickstart-ml-blueprints) repo and feel free to take as much as you need from our examples.
 
 # Rules and guidelines
 
@@ -25,7 +22,7 @@ In order to get the best out of the template:
 
 Below there are short instructions on how to get the environment for your new project up and running. Detailed version with some remarks and specific cases described are available in [QuickStart ML Blueprints documentation](https://github.com/getindata/quickstart-ml-blueprints).
 
-## Local Setup using VSCode devcontainers (recommended)
+## Local Setup using VSCode devcontainers (recommended approach)
 This approach facilitates use of [VSCode devcontainers](https://code.visualstudio.com/docs/devcontainers/containers). It is the easiest way to set up the development environment. 
 
 Prerequisites:
@@ -36,39 +33,75 @@ Setting up:
 1. Clone this repository and [open it in a container](https://code.visualstudio.com/docs/devcontainers/containers#_quick-start-open-an-existing-folder-in-a-container).
 2. You're good to go!
 
-## Local Manual Setup
+---
 
-The project is using pyenv Python version management. It lets you easily install and switch between multiple versions of Python. To install pyenv, follow [these steps](https://github.com/pyenv/pyenv#installation=) for your operating system.
+<details>
+  <summary>Click here for instructions to install locally (not recommended)</summary>
 
-To install a specific Python version use this command:
+  ## Local Manual Setup
+
+  The project is using pyenv Python version management. It lets you easily install and switch between multiple versions of Python. To install pyenv, follow [these steps](https://github.com/pyenv/pyenv#installation=) for your operating system.
+
+  To install a specific Python version use this command:
+  ```bash
+  pyenv install 3.8.16
+  pyenv shell 3.8.16
+  ```
+
+  ### Virtual environment
+
+  It is recommended to create a virtual environment in your project:
+  ```
+  python -m venv venv
+  source ./venv/bin/activate
+  ```
+
+  ### Installing dependencies with Poetry
+
+  To install libraries declared in the pyproject.toml you need to have `Poetry` installed. Install it from [here](https://python-poetry.org/docs/#installing-with-the-official-installer) and then run this command:
+  ```bash
+  poetry install
+  ```
+
+  To add and install dependencies with:
+  ```bash
+  # dependencies
+  poetry add <package_name>
+
+  # dev dependencies
+  poetry add -D <package_name>
+  ```
+
+  ### Setting up Azure CLI
+  Login and configure workspace and follow the instructions to log in to azure through the browser using a device code:
+  ```bash
+  az login --use-device-code
+  az account set --subscription {{ cookiecutter.subscription_id }}
+  az configure --defaults workspace= {{ cookiecutter.azure_prefix }}-mlw group={{ cookiecutter.azure_prefix }}-rg location={{ cookiecutter.azure_location }}
+  ```
+</details>
+
+
+# Setting up cloud infrastructure for the first time using Terraform
+
+1. Create service principal with contributor role and write down the appid, password and tenant 
 ```bash
-pyenv install 3.8.16
-pyenv shell 3.8.16
+az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/{{ cookiecutter.subscription_id }}"
 ```
-
-### Virtual environment
-
-It is recommended to create a virtual environment in your project:
-```
-python -m venv venv
-source ./venv/bin/activate
-```
-
-### Installing dependencies with Poetry
-
-To install libraries declared in the pyproject.toml you need to have `Poetry` installed. Install it from [here](https://python-poetry.org/docs/#installing-with-the-official-installer) and then run this command:
+2. Use these values to fill in `terraform/secret.tfvars` and `conf/local/credentials.yml`
+3. Set `terraform` as working directory
 ```bash
-poetry install
+cd terraform
 ```
-
-To add and install dependencies with:
+4. Initialize terraform
 ```bash
-# dependencies
-poetry add <package_name>
-
-# dev dependencies
-poetry add -D <package_name>
+terraform init
 ```
+5. Apply terraform. You may have to wait a minute before the service principal is registered
+```bash
+terraform apply --var-file secret.tfvars
+```
+
 # How to run Kedro
 
 You can run your Kedro project with:
@@ -94,3 +127,10 @@ kedro run -p "<PIPELINE_NAME>"
 - configuration can be specified inside `conf/<ENV>/mlflow.yml` file
 - by default, experiments are saved inside `mlruns` local directory
 - to see all the local experiments, run `kedro mlflow ui`
+
+#### How to manually configure kedro-mlflow
+1. Fetch remote tracking URI using `az ml workspace` command 
+```bash
+az ml workspace show --query mlflow_tracking_uri
+```
+2. Place this URI in `mlflow.yml` under `server.mlflow_tracking_uri` to configure kedro-mlflow

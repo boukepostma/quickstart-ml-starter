@@ -1,0 +1,1 @@
+storage_prefix: abfs://{{ cookiecutter.azure_prefix }}/ # Leave empty for local storage

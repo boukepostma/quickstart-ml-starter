@@ -8,47 +8,66 @@
 		// Update the 'dockerFile' property if you aren't using the standard 'Dockerfile' filename.
 		"dockerfile": "../Dockerfile"
 	},
-
-	"extensions": [
-		"ms-python.python",
-		"visualstudioexptteam.vscodeintellicode",
-		"njpwerner.autodocstring",
-		"tamasfe.even-better-toml",
-		"samuelcolvin.jinjahtml"
-	],
-
+	
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers/features/docker-from-docker:1": {
 			"version": "latest",
 			"moby": true,
 			"dockerDashComposeVersion": "v2"
+		},
+		"ghcr.io/devcontainers/features/azure-cli:1": {
+			"extensions": "ml"
+		},
+		"ghcr.io/devcontainers/features/terraform:1": {
+			"version": "latest",
+			"tflint": "latest",
+			"terragrunt": "latest"
+		},
+		"ghcr.io/devcontainers/features/common-utils:2": {
+			"configureZshAsDefaultShell": true
+		}
+	},
+	
+	// "remoteEnv": { "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}" },
+	
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"portsAttributes": {
+        "4141": {
+            "label": "Kedro viz",
+            "onAutoForward": "notify"
+        },
+		"5000": {
+            "label": "MLflow",
+            "onAutoForward": "notify"
+        }
+    },
+	"forwardPorts": [
+		4141, 5000
+	],
+	
+	// Uncomment the next line to run commands after the container is created - for example installing curl.
+	"postCreateCommand": "bash ./.devcontainer/setup.sh",
+	
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"visualstudioexptteam.vscodeintellicode",
+				"njpwerner.autodocstring",
+				"tamasfe.even-better-toml",
+				"samuelcolvin.jinjahtml",
+				"eamodio.gitlens"
+			]
 		}
 	},
 
-	"remoteEnv": { "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}" },
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	// "forwardPorts": [],
+	// "root" or "kedro" (recommended) user. More info: https://aka.ms/dev-containers-non-root.
+	"remoteUser": "kedro",
 
-	// Uncomment the next line to run commands after the container is created - for example installing curl.
-	"postCreateCommand": "bash ./.devcontainer/setup.sh",
-
-	// Configure tool-specific properties.
-	// "customizations": {},
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	"remoteUser": "root",
-
-	"runArgs": [
-		"--init"
-
-		// Uncomment for  emulated ARM64 (Apple M1/M2) support
-		//,"--platform=linux/amd64"
-
-		// Uncomment to add NVIDIA GPU support
-		// ,"--gpus"
-		// ,"all"
-	],
-
-	"shutdownAction": "none"
+	// Mount your WSL2 azure credentials
+	"mounts": [
+		"source=${localEnv:HOME}/.azure,target=/home/kedro/.azure,type=bind,consistency=cached"
+	]
 }

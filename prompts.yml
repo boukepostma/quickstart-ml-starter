@@ -3,7 +3,19 @@ project_name:
   text: |
     Please enter a human readable name for your new project.
     Spaces, hyphens, and underscores are allowed.
-  regex_validator: "^[\\w -]{2,}$"
+    IMPORTANT: Try to think of a unique name, as the project name will be used for 
+    Azure URI's which should be globally unique.
+  regex_validator: "^[\\w -]{6,17}$"
   error_message: |
     It must contain only alphanumeric symbols, spaces, underscores and hyphens and
-    be at least 2 characters long.
+    be between 6-17 characters long.
+subscription_id:
+  title: "Azure subscription id"
+  text: |
+    Please enter your Azure subscription ID where this project needs to be deployed.
+    Leave empty when you'd like to fill this in later
+azure_location:
+  title: "Location of Azure resources"
+  text: |
+    Please enter your desired Azure geographical location
+

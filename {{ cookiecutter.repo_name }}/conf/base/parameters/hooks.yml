@@ -1,0 +1,6 @@
+# map any name of credential set(s) to (storage_account_name, key) pairs
+secret_sources: 
+  abs_creds:
+    key_vault_name: "{{ cookiecutter.azure_prefix_alphanum }}devkv"
+    account_name: "{{ cookiecutter.azure_prefix_alphanum }}devst"
+    storage_key_id: "{{ cookiecutter.azure_prefix_alphanum }}devst-key"
