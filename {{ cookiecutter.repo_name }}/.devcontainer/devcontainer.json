@@ -29,8 +29,6 @@
 		}
 	},
 	
-	// "remoteEnv": { "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}" },
-	
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"portsAttributes": {
         "4141": {
@@ -52,6 +50,9 @@
 	// Configure tool-specific properties.
 	"customizations": {
 		"vscode": {
+			"settings": {
+				"python.defaultInterpreterPath": "${containerEnv:HOME}/.pyenv/versions/${containerEnv:PYTHON_VERSION}/bin/python"
+			},
 			"extensions": [
 				"ms-python.python",
 				"visualstudioexptteam.vscodeintellicode",
