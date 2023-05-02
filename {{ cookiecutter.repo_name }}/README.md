@@ -95,7 +95,8 @@ kedro run -p "<PIPELINE_NAME>"
 ```
 
 # Setting up cloud infrastructure for the first time using Terraform
-
+{% if cookiecutter.subscription_id=="<SUBSCRIPTION_ID>" -%}
+0. This project has been initiated without disclosing a subscription_id, so first replace all occurrences of "<SUBSCRIPTION_ID>" with your subscription ID in this repository. {% endif %}
 1. Create service principal with contributor role and write down the appid, password and tenant 
 ```bash
 az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/{{ cookiecutter.subscription_id }}"

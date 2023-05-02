@@ -18,7 +18,7 @@ class AzureSecretsHook:
         # If no service principal creds, don't access key vault
         if not (service_principal_creds and isinstance(service_principal_creds, dict)):
             logger.warning(
-                "Service principal credentials are incomplete."
+                "Service principal credentials are incomplete. "
                 "Key vault will not be queried"
             )
             secrets = {cred: None for cred in params["key_vault_queries"]}
@@ -26,7 +26,7 @@ class AzureSecretsHook:
         # If missing value for service principal creds, don't access key vault
         elif not all(service_principal_creds.values()):
             logger.warning(
-                "Service principal credentials are incomplete."
+                "Service principal credentials are incomplete. "
                 "Key vault will not be queried"
             )
             secrets = {cred: None for cred in params["key_vault_queries"]}

@@ -26,7 +26,7 @@ def register_pipelines() -> Dict[str, Pipeline]:
         inference=inference_pipeline,
         input_name="raw_features",
         log_model_kwargs=dict(
-            registered_model_name="{{ cookiecutter.azure_prefix }}_model",
+            registered_model_name="{{ cookiecutter.azure_prefix }}-model",
             conda_env={
                 "name": "mlflow-env",
                 "channels": ["conda-forge"],
