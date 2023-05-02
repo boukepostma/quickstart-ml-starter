@@ -17,9 +17,11 @@
 # credentials: mlflow_credentials
 
 server:
-  # mlflow_tracking_uri: sqlite:///mlflow.sqlite.db #Uncomment for local logging
-  mlflow_tracking_uri: "azureml://{{ cookiecutter.azure_location }}.api.azureml.ms/mlflow/v1.0/subscriptions/{{ cookiecutter.subscription_id }}/resourceGroups/{{ cookiecutter.azure_prefix }}-dev-rg/providers/Microsoft.MachineLearningServices/workspaces/{{ cookiecutter.azure_prefix }}-dev-mlw"
-  credentials: service_principal 
+  # local logging
+  mlflow_tracking_uri: sqlite:///mlflow.sqlite.db
+  # Uncomment the following lines for remote logging
+  # mlflow_tracking_uri: {{ cookiecutter.mlflow_tracking_uri }}
+  # credentials: service_principal 
 
 tracking:
   # You can specify a list of pipeline names for which tracking will be disabled

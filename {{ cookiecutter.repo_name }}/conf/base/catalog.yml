@@ -10,12 +10,12 @@ source_data:
 raw_labels:
   type: pandas.ParquetDataSet
   filepath: ${storage_prefix}data/01_raw/labels.pq
-  credentials: abs_creds
+  credentials: abs_creds # See hooks.yml
 
 raw_features:
   type: pandas.ParquetDataSet
   filepath: ${storage_prefix}data/01_raw/features.pq
-  credentials: abs_creds
+  credentials: abs_creds # See hooks.yml
 
 trained_model:
   type: pickle.PickleDataSet
@@ -27,4 +27,4 @@ accuracy:
 predictions:
   type: pandas.ParquetDataSet
   filepath: ${storage_prefix}data/08_reporting/predictions.pq
-  credentials: abs_creds
+  credentials: abs_creds # See hooks.yml

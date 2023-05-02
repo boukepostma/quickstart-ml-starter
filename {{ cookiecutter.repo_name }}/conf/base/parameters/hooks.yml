@@ -1,5 +1,23 @@
-# map any name of credential set(s) to (storage_account_name, key) pairs
-secret_sources: 
+# Define queries that should be done to azure key vault(s) to obtain credentials
+# These credentials will be appended to credentials.yml after context is created
+# 
+# For example, if...
+# key_vault_queries:
+#   <user-defined name>: 
+#     key_vault_name: "{{ cookiecutter.azure_prefix_alphanum }}devkv"
+#     account_name: "{{ cookiecutter.azure_prefix_alphanum }}devst"
+#     storage_key_id: "{{ cookiecutter.azure_prefix_alphanum }}devst-key"
+# 
+# ... then AzureSecretsHook will try to query the credentials of "{{ cookiecutter.azure_prefix_alphanum }}devst" 
+# from from key vault "{{ cookiecutter.azure_prefix_alphanum }}devkv" using the service_principal 
+# credentials as defined in credentials.yml.
+# 
+# If succesful, the following credentials will then be appended to credentials.yml:
+# <user-defined name>: 
+#   account_name: "{{ cookiecutter.azure_prefix_alphanum }}devst"
+#   account_key: <Storage account access key>
+
+key_vault_queries: 
   abs_creds:
     key_vault_name: "{{ cookiecutter.azure_prefix_alphanum }}devkv"
     account_name: "{{ cookiecutter.azure_prefix_alphanum }}devst"

@@ -1,10 +1,14 @@
 {
     "project_name": "New QuickStart ML Project",
     "subscription_id": "<SUBSCRIPTION_ID>",
-    "mlflow_experiment_name": "{{ cookiecutter.project_name.strip().replace(' ', '_').lower() }}",
+    "azure_location": "westeurope",
+
     "repo_name": "{{ cookiecutter.project_name.strip().replace(' ', '-').replace('_', '-').lower() }}",
     "python_package": "{{ cookiecutter.project_name.strip().replace(' ', '_').replace('-', '_').lower() }}",
+    
     "azure_prefix": "{{ cookiecutter.project_name.strip().replace(' ', '-').replace('_', '-').lower() }}",
     "azure_prefix_alphanum": "{{ cookiecutter.azure_prefix.replace('-', '') }}",
-    "azure_location": "westeurope"
+    
+    "mlflow_experiment_name": "{{ cookiecutter.project_name.strip().replace(' ', '-').lower() }}",
+    "mlflow_tracking_uri": "azureml://{{ cookiecutter.azure_location }}.api.azureml.ms/mlflow/v1.0/subscriptions/{{ cookiecutter.subscription_id }}/resourceGroups/{{ cookiecutter.azure_prefix }}-dev-rg/providers/Microsoft.MachineLearningServices/workspaces/{{ cookiecutter.azure_prefix }}-dev-mlw"
 }

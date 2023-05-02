@@ -1,1 +1,5 @@
-storage_prefix: abfs://{{ cookiecutter.azure_prefix }}/ # Leave empty for local storage
+# Use these configs for local storage
+storage_prefix: ""
+
+# Uncomment for remote storage
+# storage_prefix: abfs://{{ cookiecutter.azure_prefix }}/

@@ -81,6 +81,18 @@ Setting up:
   ```
 </details>
 
+# How to run Kedro
+
+You can run your Kedro project with:
+
+```bash
+kedro run
+```
+
+To run a specific pipeline:
+```bash
+kedro run -p "<PIPELINE_NAME>"
+```
 
 # Setting up cloud infrastructure for the first time using Terraform
 
@@ -102,18 +114,15 @@ terraform init
 terraform apply --var-file secret.tfvars
 ```
 
-# How to run Kedro
+## Setting up remote logging of data and models
+By default this project template logs all data and models locally. In order to log remotely after following the infrastructure setup with terraform above, you can toggle configurations in `globals.yml` (under `storage_prefix`) and `mlflow.yml` (under `server`).
 
-You can run your Kedro project with:
-
-```bash
-kedro run
-```
-
-To run a specific pipeline:
-```bash
-kedro run -p "<PIPELINE_NAME>"
-```
+Troubleshooting:
+* Check whether `service_principal` has been correctly defined in `conf/local/credentials.yml`
+* Check whether `server.mlflow_tracking_uri` matches with the result of 
+  ```bash
+  az ml workspace show --query mlflow_tracking_uri
+  ```
 
 # Kedro plugins
 ### [Kedro-Viz](https://github.com/kedro-org/kedro-viz)
@@ -127,10 +136,3 @@ kedro run -p "<PIPELINE_NAME>"
 - configuration can be specified inside `conf/<ENV>/mlflow.yml` file
 - by default, experiments are saved inside `mlruns` local directory
 - to see all the local experiments, run `kedro mlflow ui`
-
-#### How to manually configure kedro-mlflow
-1. Fetch remote tracking URI using `az ml workspace` command 
-```bash
-az ml workspace show --query mlflow_tracking_uri
-```
-2. Place this URI in `mlflow.yml` under `server.mlflow_tracking_uri` to configure kedro-mlflow
