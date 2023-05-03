@@ -9,7 +9,7 @@
 #     storage_key_id: "{{ cookiecutter.azure_prefix_alphanum }}devst-key"
 # 
 # ... then AzureSecretsHook will try to query the credentials of "{{ cookiecutter.azure_prefix_alphanum }}devst" 
-# from from key vault "{{ cookiecutter.azure_prefix_alphanum }}devkv" using the service_principal 
+# from key vault "{{ cookiecutter.azure_prefix_alphanum }}devkv" using the service_principal 
 # credentials as defined in credentials.yml.
 # 
 # If succesful, the following credentials will then be appended to credentials.yml:
