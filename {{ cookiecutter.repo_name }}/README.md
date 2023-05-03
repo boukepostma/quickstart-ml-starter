@@ -101,7 +101,7 @@ kedro run -p "<PIPELINE_NAME>"
 ```bash
 az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/{{ cookiecutter.subscription_id }}"
 ```
-2. Use these values to fill in `terraform/secret.tfvars` and `conf/local/credentials.yml`
+2. Use these values to fill in `terraform/secret.tfvars` and `conf/local/credentials.yml`. Note that `client_id` refers to the `appId` output
 3. Set `terraform` as working directory
 ```bash
 cd terraform

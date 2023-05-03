@@ -77,7 +77,9 @@ resource "azurerm_key_vault_access_policy" "default" {
   secret_permissions = [
     "Get",
     "Set",
-    "Delete"
+    "Delete",
+    "Purge",
+    "Recover"
   ]
 }
 
