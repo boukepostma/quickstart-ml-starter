@@ -115,6 +115,11 @@ terraform init
 terraform apply --var-file secret.tfvars
 ```
 
+Note: with the following command the provisioned infrastructure can be destroyed again:
+```bash
+terraform destroy --var-file secret.tfvars
+```
+
 ## Setting up remote logging of data and models
 By default this project template logs all data and models locally. In order to log remotely after following the infrastructure setup with terraform above, you can toggle configurations in `globals.yml` (under `storage_prefix`) and `mlflow.yml` (under `server`).
 
